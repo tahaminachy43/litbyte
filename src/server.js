@@ -47,7 +47,30 @@ const studentLogin = (data, res) => {
         }
         if (results.length > 0) {
             res.statusCode = 200;
-            res.end('Student logged in successfully, UCID: ' + results[0].ucid);
+            res.end('Student logged in successfully');
+        } else {
+            res.statusCode = 401;
+            res.end('Invalid email or password');
+        }
+    });
+};
+
+const adminLogin = (data, res) => {
+    const { email, password } = data;
+    if (!email || !password) {
+        res.statusCode = 400;
+        return res.end('Missing required fields');
+    }
+    // Assuming the admin table is named "Admin" and has an "admin_id" column.
+    const sql = 'SELECT * FROM Owner WHERE email = ? AND password = ?';
+    db.query(sql, [email, password], (err, results) => {
+        if (err) {
+            res.statusCode = 500;
+            return res.end('Error during admin login');
+        }
+        if (results.length > 0) {
+            res.statusCode = 200;
+            res.end('Admin logged in successfully, ID: ' + results[0].admin_id);
         } else {
             res.statusCode = 401;
             res.end('Invalid email or password');
@@ -58,7 +81,7 @@ const studentLogin = (data, res) => {
 const server = http.createServer((req, res) => {
     if (req.method === 'POST') {
         let body = '';
-        req.on('data', chunk => body += chunk);
+        req.on('data', chunk => (body += chunk));
         req.on('end', () => {
             try {
                 const data = JSON.parse(body);
@@ -66,6 +89,8 @@ const server = http.createServer((req, res) => {
                     studentSignup(data, res);
                 } else if (req.url === '/student/login') {
                     studentLogin(data, res);
+                } else if (req.url === '/admin/login') {
+                    adminLogin(data, res);
                 } else {
                     res.statusCode = 404;
                     res.end('Not Found');
@@ -80,5 +105,4 @@ const server = http.createServer((req, res) => {
         res.end('Not Found');
     }
 });
-
 server.listen(3000);
