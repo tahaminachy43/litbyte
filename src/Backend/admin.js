@@ -109,6 +109,8 @@ const adminAddBookStock = (db, data, res) => {
     });
 };
 
+// Add fetch book information and add pictures
+
 const adminAddEbookStock = (db, data, res) => {
     const { ebook_id, amount } = data;
     if (!ebook_id || amount == null) {
@@ -125,10 +127,11 @@ const adminAddEbookStock = (db, data, res) => {
         res.end('Ebook stock updated successfully, affected rows: ' + result.affectedRows);
     });
 };
+// Add function to modify price
 
 
 const adminGetBooks = (db, res) => {
-    const sql = 'SELECT book_id, name, stock FROM Book';
+    const sql = 'SELECT book_id, name, stock, price FROM Book';
     db.query(sql, (err, results) => {
         if (err) {
             res.statusCode = 500;
