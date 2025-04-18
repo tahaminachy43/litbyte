@@ -24,13 +24,13 @@ const adminLogin = (db, data, res) => {
 };
 
 const adminInsertBook = (db, data, res) => {
-    const { book_id, author, name, stock, price, genre } = data;
+    const { book_id, author, name, stock, price, genre, cover_page } = data;
     if (!book_id || !author || !name || stock == null || price == null || !genre) {
         res.statusCode = 400;
         return res.end('Missing required fields');
     }
-    const sql = 'INSERT INTO Book (book_id, author, name, stock, price, genre) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(sql, [book_id, author, name, stock, price, genre], (err, result) => {
+    const sql = 'INSERT INTO Book (book_id, author, name, stock, price, genre, cover_image) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(sql, [book_id, author, name, stock, price, genre, cover_page], (err, result) => {
         if (err) {
             res.statusCode = 500;
             return res.end('Error inserting book');
@@ -41,14 +41,14 @@ const adminInsertBook = (db, data, res) => {
 };
 
 const adminInsertEbook = (db, data, res) => {
-    const { ebook_id, author, name, stock, price, genre, rental } = data;
+    const { ebook_id, author, name, stock, price, genre, rental, cover_page } = data;
     if (!ebook_id || !author || !name || stock == null || price == null || !genre || rental == null) {
         res.statusCode = 400;
         return res.end('Missing required fields');
     }
     const sql =
-        'INSERT INTO Ebook (ebook_id, author, name, stock, price, genre, rental) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [ebook_id, author, name, stock, price, genre, rental], (err, result) => {
+        'INSERT INTO Ebook (ebook_id, author, name, stock, price, genre, rental, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [ebook_id, author, name, stock, price, genre, rental, cover_page], (err, result) => {
         if (err) {
             res.statusCode = 500;
             return res.end('Error inserting ebook');
@@ -92,41 +92,54 @@ const adminDeleteEbook = (db, data, res) => {
     });
 };
 
-const adminAddBookStock = (db, data, res) => {
-    const { book_id, amount } = data;
-    if (!book_id || amount == null) {
+const adminUpdateBook = (db, data, res) => {
+    const { book_id, stock, price } = data;
+    if (!book_id || (stock == null && price == null)) {
         res.statusCode = 400;
-        return res.end('Missing required fields: book_id or amount');
+        return res.end('Missing book_id or no fields to update');
     }
-    const sql = 'UPDATE Book SET stock = stock + ? WHERE book_id = ?';
-    db.query(sql, [amount, book_id], (err, result) => {
+    const sets = [];
+    const vals = [];
+    if (stock != null) {
+        sets.push('stock = ?');
+        vals.push(stock);
+    }
+    if (price != null) {
+        sets.push('price = ?');
+        vals.push(price);
+    }
+    const sql = `UPDATE Book SET ${sets.join(', ')} WHERE book_id = ?`;
+    vals.push(book_id);
+
+    db.query(sql, vals, (err, result) => {
         if (err) {
             res.statusCode = 500;
-            return res.end('Error updating book stock');
+            return res.end('Error updating book');
         }
         res.statusCode = 200;
-        res.end('Book stock updated successfully, affected rows: ' + result.affectedRows);
+        res.end('Book updated successfully, affectedRows: ' + result.affectedRows);
+    });
+};
+
+const adminUpdateEbookPrice = (db, data, res) => {
+    const { ebook_id, price } = data;
+    if (!ebook_id || price == null) {
+        res.statusCode = 400;
+        return res.end('Missing required fields: ebook_id or price');
+    }
+    const sql = 'UPDATE Ebook SET price = ? WHERE ebook_id = ?';
+    db.query(sql, [price, ebook_id], (err, result) => {
+        if (err) {
+            res.statusCode = 500;
+            return res.end('Error updating ebook price');
+        }
+        res.statusCode = 200;
+        res.end('Ebook price updated successfully, affectedRows: ' + result.affectedRows);
     });
 };
 
 // Add fetch book information and add pictures
 
-const adminAddEbookStock = (db, data, res) => {
-    const { ebook_id, amount } = data;
-    if (!ebook_id || amount == null) {
-        res.statusCode = 400;
-        return res.end('Missing required fields: ebook_id or amount');
-    }
-    const sql = 'UPDATE Ebook SET stock = stock + ? WHERE ebook_id = ?';
-    db.query(sql, [amount, ebook_id], (err, result) => {
-        if (err) {
-            res.statusCode = 500;
-            return res.end('Error updating ebook stock');
-        }
-        res.statusCode = 200;
-        res.end('Ebook stock updated successfully, affected rows: ' + result.affectedRows);
-    });
-};
 // Add function to modify price
 
 
@@ -143,13 +156,41 @@ const adminGetBooks = (db, res) => {
     });
 };
 
+const adminGetEbook = (db, res) => {
+    const sql = 'SELECT Ebook_id, name, price FROM Ebook';
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.statusCode = 500;
+            return res.end('Error retrieving Ebooks');
+        }
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(results));
+    })
+};
+
+const adminGetUsers = (db, res) => {
+    const sql = 'SELECT ucid, email, first_name, last_name FROM Student';
+    db.query(sql, (err, results) => {
+        if (err) {
+            res.statusCode = 500;
+            return res.end('Error retrieving users')
+        }
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(results));
+    })
+}
+
 module.exports = {
     adminLogin,
     adminInsertBook,
     adminInsertEbook,
     adminDeleteBook,
     adminDeleteEbook,
-    adminAddBookStock,
-    adminAddEbookStock,
-    adminGetBooks
+    adminUpdateBook,
+    adminUpdateEbookPrice,
+    adminGetBooks,
+    adminGetEbook,
+    adminGetUsers
 };
