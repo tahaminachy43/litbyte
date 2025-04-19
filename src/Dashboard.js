@@ -16,37 +16,37 @@ function Dashboard() {
         <div className="dashboard-grid">
           <div className="dashboard-card">
             <div className="card-icon">📚</div>
-            <h2 className="card-title">Categories</h2>
+            <h2 className="card-title">E-Books</h2>
             <div className="selection-buttons">
-              <button className="btn btn-primary">Manage</button>
+            <button className="btn btn-primary" onClick={() => navigate('/ebooks')}>Manage Ebooks</button>
             </div>
           </div>
           <div className="dashboard-card">
             <div className="card-icon">📖</div>
             <h2 className="card-title">Books</h2>
             <div className="selection-buttons">
-              <button className="btn btn-primary">Manage</button>
+            <button className="btn btn-primary" onClick={() => navigate('/books')}>Manage Books</button>
             </div>
           </div>
           <div className="dashboard-card">
             <div className="card-icon">👥</div>
             <h2 className="card-title">Customers</h2>
             <div className="selection-buttons">
-              <button className="btn btn-secondary">Manage</button>
+            <button className="btn btn-primary" onClick={() => navigate('/customers')}>Manage Customers</button>
             </div>
           </div>
           <div className="dashboard-card">
             <div className="card-icon">🛒</div>
             <h2 className="card-title">Orders</h2>
             <div className="selection-buttons">
-              <button className="btn btn-secondary">Manage</button>
+            <button className="btn btn-primary" onClick={() => navigate('/orders')}>Manage Orders</button>
             </div>
             <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-            <button className="btn btn-secondary" onClick={handleLogout}>Logout
-            </button>
             </div>
           </div>
         </div>
+        <button className="btn btn-secondary" onClick={handleLogout}>Logout
+        </button>
       </div>
     </div>
   );

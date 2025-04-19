@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
 
     if (email === 'admin@example.com' && password === 'adminPass') {
-      navigate('/admin-dashboard'); // redirect to dashboard
+      navigate('/admin'); // redirect to dashboard
     } else {
       setError('Invalid credentials. Please try again.');
     }
