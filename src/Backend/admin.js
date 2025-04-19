@@ -29,7 +29,7 @@ const adminInsertBook = (db, data, res) => {
         res.statusCode = 400;
         return res.end('Missing required fields');
     }
-    const sql = 'INSERT INTO Book (book_id, author, name, stock, price, genre, cover_image) VALUES (?, ?, ?, ?, ?, ?)';
+    const sql = 'INSERT INTO Book (book_id, author, name, stock, price, genre, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [book_id, author, name, stock, price, genre, cover_page], (err, result) => {
         if (err) {
             res.statusCode = 500;
