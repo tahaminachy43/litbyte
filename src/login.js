@@ -1,14 +1,28 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import loginBackground from './Assets/sky.jpg'; 
 import './login.css'; 
 
 function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (email === 'admin@example.com' && password === 'adminPass') {
+      navigate('/admin-dashboard'); // redirect to dashboard
+    } else {
+      setError('Invalid credentials. Please try again.');
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-left" style={{ backgroundImage: `url(${loginBackground})` }}>
         <div className="login-logo-container">
-          <h1>LitByte</h1>
         </div>
       </div>
       
@@ -18,7 +32,7 @@ function Login() {
           <h2>Welcome Back!</h2>
           <p className="welcome-text">Please login to your account.</p>
           
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="username">User Name</label>
               <input 
@@ -26,6 +40,8 @@ function Login() {
                 id="username" 
                 placeholder="username@gmail.com" 
                 className="form-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             
@@ -36,6 +52,8 @@ function Login() {
                 id="password" 
                 placeholder="*********" 
                 className="form-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             
@@ -48,6 +66,7 @@ function Login() {
             </div>
             
             <button type="submit" className="login-button">Login</button>
+            {error && <p style={{ color: '#ff6b6b', marginTop: '1rem' }}>{error}</p>}
           </form>
           
           <p className="signup-link">

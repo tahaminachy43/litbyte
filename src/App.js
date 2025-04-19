@@ -8,12 +8,16 @@ import Customer from "./Customer";
 import Recomendations from "./recomendation";
 import Courses from "./Courses";
 import Cart from "./cart";
+import Dashboard from "./Dashboard"; 
+
+
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
+        <Route path="/admin-dashboard" element={<Dashboard />} />
           <Route path="/" element={
             <header className="App-header">
               <div className="header-top">
