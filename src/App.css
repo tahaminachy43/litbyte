@@ -102,3 +102,20 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
+
+.auth-buttons .login-btn,
+.auth-buttons .register-btn {
+  padding: 12px 24px;       
+  font-size: 18px;
+  font-weight: bold;        /* Make text bold */
+  border-radius: 8px;       /* Rounder corners */
+  text-decoration: none;    /* Remove underline (since it's a Link) */
+  margin: 0 10px;           /* Add spacing between buttons */
+  transition: all 0.3s;     
+}
+
+.auth-buttons .login-btn:hover,
+.auth-buttons .register-btn:hover {
+  transform: scale(1.05);   
+  opacity: 0.9;
+}

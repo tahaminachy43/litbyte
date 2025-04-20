@@ -1,0 +1,376 @@
+/* Base Styles */
+.profile-page-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+  }
+  
+  /* Navigation Bar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav-left {
+    flex: 1;
+  }
+  
+  .logo-container h1 {
+    font-family: "Homemade Apple", cursive;
+    font-size: 2rem;
+    color: #333;
+    margin: 0;
+  }
+  
+  .nav-center {
+    flex: 2;
+  }
+  
+  .nav-links {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-links li {
+    margin: 0 1.5rem;
+    position: relative;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+  }
+  
+  .nav-links li.active a {
+    color: #4a90e2;
+    font-weight: 600;
+  }
+  
+  .nav-links li.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #4a90e2;
+    border-radius: 3px;
+  }
+  
+  .nav-links a:hover {
+    color: #4a90e2;
+  }
+  
+  .nav-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .search-container {
+    display: flex;
+    align-items: center;
+    margin-right: 1.5rem;
+  }
+  
+  .search-input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 20px 0 0 20px;
+    outline: none;
+    width: 200px;
+  }
+  
+  .search-button {
+    padding: 0.5rem 1rem;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .search-icon {
+    font-size: 1rem;
+  }
+  
+  .cart-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    font-size: 1.3rem;
+    position: relative;
+  }
+  
+  .cart-button:hover {
+    color: #4a90e2;
+  }
+  
+  /* Profile Container */
+  .profile-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  
+  /* Header */
+  .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+  }
+  
+  .profile-header h1 {
+    font-size: 2rem;
+    color: #2c3e50;
+  }
+  
+  .logout-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+  }
+  
+  .logout-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  /* User Info Section */
+  .user-info-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  
+  .user-avatar {
+    background-color: #3498db;
+    color: white;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .user-details h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+  
+  .user-details p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    color: #555;
+  }
+  
+  /* Section Headers */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+  }
+  
+  .section-header h2 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+  }
+  
+  /* Courses Section */
+  .courses-section {
+    margin-bottom: 2rem;
+  }
+  
+  .add-course-btn {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+  }
+  
+  .add-course-btn:hover {
+    background-color: #27ae60;
+  }
+  
+  .courses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .course-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  
+  .course-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #3498db;
+  }
+  
+  .course-card p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+  }
+  
+  /* Payment Section */
+  .payment-section {
+    margin-bottom: 2rem;
+  }
+  
+  .payment-toggle-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+  }
+  
+  .payment-toggle-btn:hover {
+    background-color: #2980b9;
+  }
+  
+  .payment-form {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .form-row .form-group {
+    flex: 1;
+  }
+  
+  .save-payment-btn {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .save-payment-btn:hover {
+    background-color: #27ae60;
+  }
+
+  /* Course Card Header */
+.course-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Delete Course Button */
+  .delete-course-btn {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    padding: 0.25rem;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+  
+  .delete-course-btn:hover {
+    color: #c0392b;
+  }
+  
+  /* Course Card Adjustments */
+  .course-card {
+    position: relative;
+    padding: 1.25rem 1.5rem;
+  }
+  
+  .course-card h3 {
+    margin-right: 1.5rem; /* Space for delete button */
+  }

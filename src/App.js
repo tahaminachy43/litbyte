@@ -6,7 +6,7 @@ import Login from './login';
 import Register from './register';
 import Customer from "./Customer";
 import Recomendations from "./recomendation";
-import Courses from "./Courses";
+import Courses from "./Profile";
 import Cart from "./cart";
 
 function App() {
@@ -31,15 +31,7 @@ function App() {
               <div className="content-container">
                 <div className="content-text">
                   <p>
-                    LitBytes is an online student bookstore designed to address the challenges faced by a
-                    campus bookstore owner due to declining in-person sales. The root of the problem lies in shifting
-                    student preferences—many now favour the convenience of online shopping, home delivery, and
-                    quick turnaround times offered by other e-commerce platforms. Additionally, students often rely
-                    on public transit and may not have access to cars, making trips to a physical bookstore less
-                    appealing. LitBytes offers a comprehensive solution by providing an online platform for
-                    purchasing school-related books in a physical or online form. Students—our primary
-                    customers—will have the flexibility to buy physical books with options for in-store pickup or
-                    home delivery, purchase e-books for immediate access and rent e-books for immediate use.
+                    Welcome to LitByte
                   </p>
                 </div>
                 
