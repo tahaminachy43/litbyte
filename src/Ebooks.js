@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 
 function EBooks() {
   const navigate = useNavigate();
+  const [ebooks, setEbooks] = useState([]);
 
-  const [ebooks, setEbooks] = useState([
-    { id: 1, title: "E-Book A", price: "12.99", stock: "30", expanded: false },
-    { id: 2, title: "E-Book B", price: "9.99", stock: "50", expanded: false },
-    { id: 3, title: "E-Book C", price: "5.99", stock: "80", expanded: false }
-  ]);
+  // Fetch eBooks on first render
+  useEffect(() => {
+    const fetchEbooks = async () => {
+      try {
+        const res = await fetch('http://localhost:3000/admin/ebook/getAll');
+        const data = await res.json();
+        // Add expanded flag to each ebook
+        const withExpand = data.map(e => ({ ...e, expanded: false }));
+        setEbooks(withExpand);
+      } catch (error) {
+        console.error("Failed to fetch eBooks:", error);
+      }
+    };
+
+    fetchEbooks();
+  }, []);
 
   const toggleExpand = (id) => {
     setEbooks(prev =>
@@ -23,9 +35,23 @@ function EBooks() {
     );
   };
 
-  const handleUpdate = (id) => {
+  const handleUpdate = async (id) => {
     const ebook = ebooks.find(e => e.id === id);
-    console.log("Updated e-book:", ebook);
+    try {
+      const res = await fetch(`http://localhost:3000/admin/ebook/admin/update/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: ebook.title, price: ebook.price })
+      });
+
+      if (res.ok) {
+        alert('E-Book updated successfully!');
+      } else {
+        alert('Failed to update E-Book.');
+      }
+    } catch (err) {
+      console.error("Update error:", err);
+    }
   };
 
   return (
@@ -40,21 +66,19 @@ function EBooks() {
             {ebook.expanded && (
               <div className="item-details">
                 <div className="field-block">
+                  <label>Title:</label>
+                  <input
+                    className="compact-input"
+                    value={ebook.title}
+                    onChange={(e) => handleChange(ebook.id, 'title', e.target.value)}
+                  />
                 </div>
                 <div className="field-block">
-                  <label>Price ($):</label><br></br>
+                  <label>Price ($):</label>
                   <input
                     className="compact-input"
                     value={ebook.price}
                     onChange={(e) => handleChange(ebook.id, 'price', e.target.value)}
-                  />
-                </div>
-                <div className="field-block">
-                  <label>Stock:</label><br></br>
-                  <input
-                    className="compact-input"
-                    value={ebook.stock}
-                    onChange={(e) => handleChange(ebook.id, 'stock', e.target.value)}
                   />
                 </div>
                 <button className="btn btn-secondary small-update-btn" onClick={() => handleUpdate(ebook.id)}>
@@ -65,7 +89,9 @@ function EBooks() {
           </div>
         ))}
       </div>
-      <button className="btn btn-secondary" onClick={() => navigate('/admin')}>Back</button>
+      <button className="btn btn-secondary" onClick={() => navigate('/admin')}>
+        Back
+      </button>
     </div>
   );
 }

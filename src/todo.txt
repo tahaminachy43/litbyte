@@ -1,0 +1,6 @@
+-remove stock on ebook
+-change customer to not editable
+-change order to not editable
+-change colours to match blue/purple
+
+-admin.js backend
