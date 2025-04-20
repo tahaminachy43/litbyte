@@ -13,6 +13,7 @@ import Ebooks from "./Ebooks";
 import Books from "./Books";
 import Customers from "./Customers";
 import Orders from "./Orders";
+import AdminLogin from "./adminLogin";
 
 function HomeWithNavbar() {
   return (
@@ -24,6 +25,7 @@ function HomeWithNavbar() {
         </div>
         
         <div className="auth-buttons">
+          <Link to="./adminLogin" className='register-btn'>Admin Login</Link>
           <Link to="/login" className="login-btn">Login</Link>
           <Link to="/register" className="register-btn">Register</Link>
         </div>
@@ -62,6 +64,7 @@ function App() {
           <Route path="/customers" element={<Customers />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/admin" element={<Dashboard />} />
+          <Route path="/adminLogin" element={<AdminLogin />} />
         </Routes>
       </div>
     </Router>
