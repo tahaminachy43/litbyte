@@ -38,7 +38,7 @@ function Home() {
               <Link to="/recommendations">Recommendations</Link>
             </li>
             <li className={location.pathname === '/courses' ? 'active' : ''}>
-              <Link to="/courses">Courses</Link>
+              <Link to="/courses">Profile</Link>
             </li>
             <li className={location.pathname === '/cart' ? 'active' : ''}>
               <Link to="/cart">Cart</Link>
