@@ -4,3 +4,5 @@
 -change colours to match blue/purple
 
 -admin.js backend
+-fetch books, ebooks, customer
+-do orders last
