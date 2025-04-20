@@ -57,7 +57,7 @@ export default function Register() {
       <div className="signup-container">
         <div className="signup-left">
           <div className="signup-form">
-            <h1 className="logo">LitByte</h1>
+            
             <h2>Create Account</h2>
             <p className="welcome-text">Join us to get started!</p>
 
@@ -159,7 +159,9 @@ export default function Register() {
 
         <div className="signup-right" style={{ backgroundImage: `url(${signupBackground})` }}>
           <div className="signup-logo-container">
-            <h1>LitByte</h1>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <h1 className="logo">LitByte</h1>
+            </Link>
           </div>
         </div>
       </div>

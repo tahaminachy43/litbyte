@@ -34,44 +34,52 @@ export default function Login() {
   };
 
   return (
-      <div className="login-container">
-        <div className="login-left" style={{ backgroundImage: `url(${loginBackground})` }}>
-          <div className="login-logo-container"><h1>LitByte</h1></div>
-        </div>
-        <div className="login-right">
-          <div className="login-form">
-            <h1 className="logo">LitByte</h1>
-            <h2>Admin Login</h2>
-            <p className="welcome-text">Please login to your account.</p>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    className="form-input"
-                    required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    className="form-input"
-                    required
-                />
-              </div>
-              <button type="submit" className="login-button">Login</button>
-            </form>
-            {message && <p className="message">{message}</p>}
-            
-          </div>
+    <div className="login-container">
+      <div className="login-left" style={{ backgroundImage: `url(${loginBackground})` }}>
+        <div className="login-logo-container">
+          {/* Clickable logo */}
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <h1>LitByte</h1>
+          </Link>
         </div>
       </div>
+      <div className="login-right">
+        <div className="login-form">
+          {/* Clickable logo in the form section */}
+          <Link to="/" className="logo-link">
+            <h1 className="logo">LitByte</h1>
+          </Link>
+          
+          <h2>Admin Login</h2>
+          <p className="welcome-text">Please login to your account.</p>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className="form-input"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="form-input"
+                required
+              />
+            </div>
+            <button type="submit" className="login-button">Login</button>
+          </form>
+          {message && <p className="message">{message}</p>}
+        </div>
+      </div>
+    </div>
   )
 }
