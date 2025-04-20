@@ -1,7 +1,11 @@
+dashboard.js frontend
 -remove stock on ebook
 -change customer to not editable
 -change order to not editable
+-change name to not editable for ebook update
 -change colours to match blue/purple
+-insert new ebook function
+-insert new book function
 
 -admin.js backend
 -fetch books, ebooks, customer
