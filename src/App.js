@@ -8,12 +8,21 @@ import Customer from "./Customer";
 import Recomendations from "./recomendation";
 import Courses from "./Profile";
 import Cart from "./cart";
+import Dashboard from "./Dashboard"; 
+import Ebooks from "./Ebooks";
+import Books from "./Books";
+import Customers from "./Customers";
+import Orders from "./Orders";
+
+
+
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
+        <Route path="/admin" element={<Dashboard />} />
           <Route path="/" element={
             <header className="App-header">
               <div className="header-top">
@@ -47,7 +56,12 @@ function App() {
           <Route path="/recommendations" element={<Recomendations />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/ebooks" element={<Ebooks />} />
+          <Route path="/books" element={<Books />} />
+          <Route path="/customers" element={<Customers />} />
+          <Route path="/orders" element={<Orders />} />
 
+          
         </Routes>
       </div>
     </Router>
