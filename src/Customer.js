@@ -2,7 +2,7 @@ import React from 'react';
 import { FaSearch, FaShoppingCart } from 'react-icons/fa';
 import { useLocation, Link } from 'react-router-dom';
 import './customer.css';
-import book1 from "./Assets/Book 1.jpg";
+import book1 from "./Assets/C1001.jpg";
 import book2 from "./Assets/Book 2.jpg";
 import book3 from "./Assets/Book 3.jpg";
 import book4 from "./Assets/Book 4.jpg";
