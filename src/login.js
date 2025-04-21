@@ -4,10 +4,10 @@ import loginBackground from './Assets/sky.jpg';
 import './login.css';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+  const [message, setMessage]   = useState('');
+  const navigate                 = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,9 +24,11 @@ export default function Login() {
       if (!res.ok) {
         setMessage(`Error: ${text}`);
       } else {
-        setMessage(`Success: ${text}`);
-        // On successful login, redirect
-        setTimeout(() => navigate('/dashboard'), 1500);
+        // store email (not UCID) in localStorage
+        localStorage.setItem('email', email);
+        setMessage('Login successful!');
+        // navigate to profile page
+        setTimeout(() => navigate('/customer'), 1500);
       }
     } catch (err) {
       setMessage('Network error');
@@ -36,11 +38,18 @@ export default function Login() {
   return (
       <div className="login-container">
         <div className="login-left" style={{ backgroundImage: `url(${loginBackground})` }}>
-          <div className="login-logo-container"><h1>LitByte</h1></div>
+          <div className="login-logo-container">
+
+              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <h1>LitByte</h1>
+              </Link>
+          </div>
         </div>
         <div className="login-right">
           <div className="login-form">
-            <h1 className="logo">LitByte</h1>
+            <Link to="/" className="logo-link">
+              <h1 className="logo">LitByte</h1>
+            </Link>
             <h2>Welcome Back!</h2>
             <p className="welcome-text">Please login to your account.</p>
             <form onSubmit={handleSubmit}>
@@ -75,6 +84,5 @@ export default function Login() {
           </div>
         </div>
       </div>
-  )
+  );
 }
-
