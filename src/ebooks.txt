@@ -11,45 +11,29 @@ function EBooks() {
     const fetchEbooks = async () => {
       try {
         const res = await fetch('http://localhost:3000/admin/ebook/getAll');
-
-        if (!res.ok) throw new Error(`Error fetching eBooks: ${res.status}`);
-        const data = await res.json();
-        // Include an 'id' field for each ebook (from ebook_id or Ebook_id) and expanded flag
-        const withExpand = data.map(e => ({
-          ...e,
-          id: e.ebook_id || e.Ebook_id,
-          expanded: false
-        }));
-
         const data = await res.json();
         // Add expanded flag to each ebook
         const withExpand = data.map(e => ({ ...e, expanded: false }));
-
-
-  // Update price for the expanded ebook
-  const handleUpdate = async (id) => {
-    const ebook = ebooks.find(e => e.id === id);
-    if (!ebook) return;
-    try {
-      const res = await fetch('http://localhost:3000/admin/ebook/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ebook_id: id,
-          price: parseFloat(ebook.price)
-        })
-      });
-      if (res.ok) {
-        alert('E-Book price updated successfully!');
-        // Collapse the panel after a successful update
-        toggleExpand(id);
-      } else {
-        const text = await res.text();
-        alert(`Update failed: ${text}`);
+        setEbooks(withExpand);
+      } catch (error) {
+        console.error("Failed to fetch eBooks:", error);
       }
-    } catch (err) {
-      console.error("Update error:", err);
-      alert('Network or server error');
+    };
+
+    fetchEbooks();
+  }, []);
+
+  const toggleExpand = (id) => {
+    setEbooks(prev =>
+      prev.map(e => e.id === id ? { ...e, expanded: !e.expanded } : e)
+    );
+  };
+
+  const handleChange = (id, field, value) => {
+    setEbooks(prev =>
+      prev.map(e => e.id === id ? { ...e, [field]: value } : e)
+    );
+  };
 
   const handleUpdate = async (id) => {
     const ebook = ebooks.find(e => e.id === id);
@@ -67,20 +51,10 @@ function EBooks() {
       }
     } catch (err) {
       console.error("Update error:", err);
+    }
+  };
 
   return (
-
-      <div className="App">
-        <h1 className="dashboard-title">E-Books List</h1>
-        <div className="item-list">
-          {ebooks.map(ebook => (
-              <div className="list-item-box" key={ebook.id}>
-                <button
-                    className="btn btn-primary compact-btn"
-                    onClick={() => toggleExpand(ebook.id)}
-                >
-                  {ebook.name}
-
     <div className="App">
       <h1 className="dashboard-title">E-Books List</h1>
       <div className="item-list">
@@ -109,13 +83,16 @@ function EBooks() {
                 </div>
                 <button className="btn btn-secondary small-update-btn" onClick={() => handleUpdate(ebook.id)}>
                   Update
-
-
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
       <button className="btn btn-secondary" onClick={() => navigate('/admin')}>
         Back
       </button>
     </div>
-
   );
 }
 
