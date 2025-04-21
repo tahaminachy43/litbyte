@@ -15,7 +15,7 @@ const adminLogin = (db, data, res) => {
         }
         if (results.length > 0) {
             res.statusCode = 200;
-            res.end('Admin logged in successfully, ID: ' + results[0].admin_id);
+            res.end('Admin logged in successfully');
         } else {
             res.statusCode = 401;
             res.end('Invalid email or password');

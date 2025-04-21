@@ -37,9 +37,49 @@ const studentLogin = (db, data, res) => {
     });
 };
 
+const addCourse = (db, data, res) => {
+    const { ucid, course_id } = data;
+    if (!ucid || !course_id) {
+        res.statusCode = 400;
+        return res.end('Missing required fields: ucid or course_id');
+    }
+
+    const sql = `
+    INSERT INTO Student_Course (ucid, course_id)
+    VALUES (?, ?)
+  `;
+    db.query(sql, [ucid, course_id], (err, result) => {
+        if (err) {
+            res.statusCode = 500;
+            return res.end('Error adding course to student');
+        }
+        res.statusCode = 201;
+        res.end('Course added successfully');
+    });
+};
+
+const deleteCourse = (db, data, res) => {
+    const { ucid, course_id } = data;
+    if (!ucid || !course_id) {
+        res.statusCode = 400;
+        return res.end('Missing required fields');
+    }
+    const sql = 'DELETE FROM Student_Course WHERE ucid = ? AND course_id = ?';
+    db.query(sql, [ucid, course_id], (err, result) => {
+        if (err) {
+            res.statusCode = 500;
+            return res.end('Error deleting course');
+        }
+        res.statusCode = 201;
+        res.end('Course deleted successfully');
+    });
+};
+
 // Add course ID entity for books Ebooks and student
 // Add modify course ID for student
 module.exports = {
     studentSignup,
-    studentLogin
+    studentLogin,
+    addCourse,
+    deleteCourse
 };

@@ -4,10 +4,10 @@ import loginBackground from './Assets/sky.jpg';
 import './login.css';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+  const [message, setMessage]   = useState('');
+  const navigate                 = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,9 +24,11 @@ export default function Login() {
       if (!res.ok) {
         setMessage(`Error: ${text}`);
       } else {
-        setMessage(`Success: ${text}`);
-        // On successful login, redirect
-        setTimeout(() => navigate('/dashboard'), 1500);
+        // store email (not UCID) in localStorage
+        localStorage.setItem('email', email);
+        setMessage('Login successful!');
+        // navigate to profile page
+        setTimeout(() => navigate('/customer'), 1500);
       }
     } catch (err) {
       setMessage('Network error');
@@ -75,6 +77,5 @@ export default function Login() {
           </div>
         </div>
       </div>
-  )
+  );
 }
-
