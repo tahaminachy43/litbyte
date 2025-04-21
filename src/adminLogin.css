@@ -105,7 +105,6 @@
     font-weight: 500;
   }
   
-
   a {
     text-decoration: none;
   }
@@ -141,146 +140,16 @@
     margin: 0;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
-
-
-.signup-container {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: row-reverse; 
-  }
-  
-  .signup-left {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-  }
-  
-  .signup-right {
-    flex: 1;
-    position: relative;
-    background-size: cover;
-    background-position: center;
-  }
-  
-  .signup-logo-container {
-    position: absolute;
-    top: 30px;
-    left: 30px; 
-    padding: 10px 20px;
-
-  }
-  
-  .signup-logo-container h1 {
-    font-family: "Homemade Apple", cursive;
-    font-size: 2.5rem;
-    color: #333;
-    margin: 0;
-  }
-  
-  .signup-form {
-    width: 100%;
-    max-width: 400px;
-    padding: 40px;
-  }
-  
-  .signup-form .logo {
-    font-family: "Homemade Apple", cursive;
-    font-size: 2.5rem;
-    color: #333;
-    text-align: left;
-    margin-bottom: 20px;
-  }
-  
-  .signup-form h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    text-align: left;
-  }
-  
-  .welcome-text {
-    color: #666;
-    margin-bottom: 30px;
-    text-align: left;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #333;
-  }
-  
-  .form-input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .form-options {
-    margin-bottom: 25px;
-  }
-  
-  .terms-agreement {
-    display: flex;
-    align-items: center;
-  }
-  
-  .terms-agreement input {
-    margin-right: 8px;
-  }
-  
-  .signup-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #272eb4;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .signup-button:hover {
-    background-color: #13193f;
-  }
-  
-  .login-link {
-    text-align: center;
-    margin-top: 20px;
-    color: #666;
-  }
-  
-  .login-link-text {
-    color: #4a90e2;
-    font-weight: 500;
-    margin-left: 5px;
-  }
-
-  a {
-    text-decoration: none;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-
-  /* Make the logo interactive */
-.logo {
-  cursor: pointer;
-  transition: color 0.2s ease;
+/* Make the logo look clickable */
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
 }
 
-.logo:hover {
-
-  transform: scale(1.02); /* Slight zoom effect */
+.logo-link:hover h1 {
+  color: #0c0e18; /* Change color on hover */
+  transform: scale(1.02);
+  transition: all 0.2s ease;
 }
+

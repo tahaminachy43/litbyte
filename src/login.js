@@ -38,11 +38,18 @@ export default function Login() {
   return (
       <div className="login-container">
         <div className="login-left" style={{ backgroundImage: `url(${loginBackground})` }}>
-          <div className="login-logo-container"><h1>LitByte</h1></div>
+          <div className="login-logo-container">
+
+              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <h1>LitByte</h1>
+              </Link>
+          </div>
         </div>
         <div className="login-right">
           <div className="login-form">
-            <h1 className="logo">LitByte</h1>
+            <Link to="/" className="logo-link">
+              <h1 className="logo">LitByte</h1>
+            </Link>
             <h2>Welcome Back!</h2>
             <p className="welcome-text">Please login to your account.</p>
             <form onSubmit={handleSubmit}>
