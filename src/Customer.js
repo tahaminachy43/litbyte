@@ -64,7 +64,10 @@ function Home() {
           <h2>Welcome to LitByte</h2>
           <p>Here are some newly added books</p>
           <p className="subtext">With us, you can shop online & help save time?</p>
-          <button className="explore-button">Explore Books →</button>
+          {/* This should link to recomendation  */}
+          <Link to="/recommendations" className="explore-button">
+            Explore Books →
+          </Link>
         </div>
         
         <div className="books-scrollable">

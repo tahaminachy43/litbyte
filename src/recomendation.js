@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaSearch, FaShoppingCart } from 'react-icons/fa';
 import { useLocation, Link } from 'react-router-dom';
-import './customer.css';
+import './recomendation.css';
 import book1 from "./Assets/C1001.jpg";
 import book2 from "./Assets/Book 2.jpg";
 import book3 from "./Assets/Book 3.jpg";
@@ -14,9 +14,17 @@ const recommendedBooks = [
   { id: 3, title: 'The Psychology of Money', author: 'Morgan Housel', cover: book3 },
   { id: 4, title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', cover: book4 },
   { id: 5, title: 'The 7 Habits of Highly Effective People', author: 'Stephen R. Covey', cover: book5 },
+];
+
+const allBooks = [
+  ...recommendedBooks,
   { id: 6, title: "YOU'VE REACHED SAM", author: 'Dustin Thao', cover: book1 },
   { id: 7, title: 'Educated', author: 'Tara Westover', cover: book2 },
   { id: 8, title: 'Sapiens', author: 'Yuval Noah Harari', cover: book3 },
+  { id: 9, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', cover: book4 },
+  { id: 10, title: 'To Kill a Mockingbird', author: 'Harper Lee', cover: book5 },
+  { id: 11, title: '1984', author: 'George Orwell', cover: book1 },
+  { id: 12, title: 'Pride and Prejudice', author: 'Jane Austen', cover: book2 },
 ];
 
 function Recommendations() {
@@ -64,6 +72,7 @@ function Recommendations() {
 
       {/* Main Content */}
       <div className="recommendations-content">
+        {/* Recommended Books Section */}
         <div className="recommendations-header">
           <h1>Recommended Books For You</h1>
           <p className="subtitle">Based on your reading preferences</p>
@@ -72,6 +81,25 @@ function Recommendations() {
         <div className="full-width-scroll-container">
           <div className="books-scrollable">
             {recommendedBooks.map(book => (
+              <div key={book.id} className="book-card">
+                <img src={book.cover} alt={book.title} className="book-cover" />
+                <h3>{book.title}</h3>
+                <p className="author">{book.author}</p>
+                <button className="add-to-cart-btn">Add to Cart</button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* All Books Grid Section */}
+        <div className="all-books-section">
+          <div className="section-header">
+            <h2>All Available Books</h2>
+            <p className="subtitle">Browse our complete collection</p>
+          </div>
+          
+          <div className="books-grid">
+            {allBooks.map(book => (
               <div key={book.id} className="book-card">
                 <img src={book.cover} alt={book.title} className="book-cover" />
                 <h3>{book.title}</h3>

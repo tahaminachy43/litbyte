@@ -1,0 +1,76 @@
+/* Add these new styles to your existing CSS */
+
+/* All Books Section */
+.all-books-section {
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .section-header h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Books Grid Layout */
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+    width: 100%;
+  }
+  
+  /* Adjust the book card for grid layout */
+  .books-grid .book-card {
+    width: 100%;
+    margin: 0;
+  }
+  
+  /* Responsive adjustments for grid */
+  @media (max-width: 768px) {
+    .books-grid {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+    
+    .book-cover {
+      width: 140px;
+      height: 200px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .books-grid {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+    
+    .book-card {
+      padding: 1rem;
+    }
+    
+    .book-cover {
+      width: 100px;
+      height: 150px;
+    }
+    
+    .book-card h3 {
+      font-size: 1rem;
+      height: auto;
+    }
+    
+    .book-card .author {
+      font-size: 0.8rem;
+      height: auto;
+    }
+    
+    .add-to-cart-btn {
+      padding: 0.5rem;
+      font-size: 0.8rem;
+    }
+  }
