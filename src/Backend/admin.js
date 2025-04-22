@@ -142,6 +142,23 @@ const adminUpdateEbookPrice = (db, data, res) => {
 
 // Add function to modify price
 
+const adminDeleteUser = (db, data, res) => {
+    const { user_id } = data;
+    if (!user_id) {
+        res.statusCode = 400;
+        return res.end('Missing required field: user_id');
+    }
+    const sql = 'DELETE FROM Student WHERE ucid = ?';
+    db.query(sql, [user_id], (err, result) => {
+        if (err) {
+            res.statusCode = 500;
+            return res.end('Error deleting user');
+        }
+        res.statusCode = 200;
+        res.end('User deleted successfully, affected rows: ' + result.affectedRows);
+    });
+};
+
 
 const adminGetBooks = (db, res) => {
     const sql = 'SELECT book_id, name, stock, price FROM Book';
@@ -181,6 +198,20 @@ const adminGetUsers = (db, res) => {
         res.end(JSON.stringify(results));
     })
 }
+const adminGetOrders = (db, res) => {
+    const sql = 'SELECT Order_ID, Total_Price FROM Orders';
+    db.query(sql, (err, results) => {
+      if (err) {
+        res.statusCode = 500;
+        return res.end('Error retrieving orders');
+      }
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify(results));
+    });
+  };
+
+
 
 module.exports = {
     adminLogin,
@@ -192,5 +223,7 @@ module.exports = {
     adminUpdateEbookPrice,
     adminGetBooks,
     adminGetEbook,
-    adminGetUsers
+    adminGetUsers,
+    adminDeleteUser,
+    adminGetOrders
 };

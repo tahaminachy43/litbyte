@@ -5,15 +5,22 @@ import './App.css';
 function EBooks() {
   const navigate = useNavigate();
   const [ebooks, setEbooks] = useState([]);
+  const [newEbook, setNewEbook] = useState({
+    ebook_id: '',
+    author: '',
+    name: '',
+    stock: '',
+    price: '',
+    genre: ''
+  });
 
-  // Fetch eBooks on first render
+  // Fetch existing ebooks
   useEffect(() => {
     const fetchEbooks = async () => {
       try {
         const res = await fetch('http://localhost:3000/admin/ebook/getAll');
         if (!res.ok) throw new Error(`Error fetching eBooks: ${res.status}`);
         const data = await res.json();
-        // Include an 'id' field for each ebook (from ebook_id or Ebook_id) and expanded flag
         const withExpand = data.map(e => ({
           ...e,
           id: e.ebook_id || e.Ebook_id,
@@ -27,25 +34,18 @@ function EBooks() {
     fetchEbooks();
   }, []);
 
-  // Toggle expanded view for a specific ebook
   const toggleExpand = (id) => {
     setEbooks(prev =>
-        prev.map(e =>
-            e.id === id ? { ...e, expanded: !e.expanded } : e
-        )
+      prev.map(e => (e.id === id ? { ...e, expanded: !e.expanded } : e))
     );
   };
 
-  // Handle field changes (only price is editable)
   const handleChange = (id, field, value) => {
     setEbooks(prev =>
-        prev.map(e =>
-            e.id === id ? { ...e, [field]: value } : e
-        )
+      prev.map(e => (e.id === id ? { ...e, [field]: value } : e))
     );
   };
 
-  // Update price for the expanded ebook
   const handleUpdate = async (id) => {
     const ebook = ebooks.find(e => e.id === id);
     if (!ebook) return;
@@ -60,7 +60,6 @@ function EBooks() {
       });
       if (res.ok) {
         alert('E-Book price updated successfully!');
-        // Collapse the panel after a successful update
         toggleExpand(id);
       } else {
         const text = await res.text();
@@ -72,53 +71,125 @@ function EBooks() {
     }
   };
 
-  return (
-      <div className="App">
-        <h1 className="dashboard-title">E-Books List</h1>
-        <div className="item-list">
-          {ebooks.map(ebook => (
-              <div className="list-item-box" key={ebook.id}>
-                <button
-                    className="btn btn-primary compact-btn"
-                    onClick={() => toggleExpand(ebook.id)}
-                >
-                  {ebook.name}
-                </button>
+  const handleNewChange = (field, value) => {
+    setNewEbook(prev => ({ ...prev, [field]: value }));
+  };
 
-                {ebook.expanded && (
-                    <div className="item-details">
-                      <div className="field-block">
-                        <label>ID:</label>
-                        <span>{ebook.id}</span>
-                      </div>
-                      <div className="field-block">
-                        <label>Title:</label>
-                        <span>{ebook.name}</span>
-                      </div>
-                      <div className="field-block">
-                        <label>Price ($):</label>
-                        <input
-                            type="number"
-                            className="compact-input"
-                            value={ebook.price}
-                            onChange={e => handleChange(ebook.id, 'price', e.target.value)}
-                        />
-                      </div>
-                      <button
-                          className="btn btn-secondary small-update-btn"
-                          onClick={() => handleUpdate(ebook.id)}
-                      >
-                        Update
-                      </button>
-                    </div>
-                )}
-              </div>
+  const handleInsert = async () => {
+    const { ebook_id, author, name, stock, price, genre } = newEbook;
+    if (!ebook_id || !author || !name || !stock || !price || !genre) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:3000/admin/ebook/insert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ebook_id,
+          author,
+          name,
+          stock: parseInt(stock),
+          price: parseFloat(price),
+          genre,
+          rental: 0,             // default to 0 (not rented)
+          cover_page: ''         // optional, leave empty or update as needed
+        })
+      });
+
+      if (res.ok) {
+        alert('E-Book inserted successfully!');
+        setNewEbook({
+          ebook_id: '', author: '', name: '', stock: '', price: '', genre: ''
+        });
+        const updatedList = await res.json();
+        setEbooks(prev => [...prev, {
+          ...newEbook,
+          id: ebook_id,
+          expanded: false
+        }]);
+      } else {
+        const text = await res.text();
+        alert(`Insert failed: ${text}`);
+      }
+    } catch (err) {
+      console.error('Insert error:', err);
+      alert('Network or server error');
+    }
+  };
+
+  return (
+    <div className="App">
+      <h1 className="dashboard-title">E-Books List</h1>
+
+      {/* Insert Form */}
+      <div className="list-item-box">
+        <h2 style={{ marginBottom: '1rem' }}>Insert New E-Book</h2>
+        <div className="item-details">
+          {['ebook_id', 'author', 'name', 'stock', 'price', 'genre'].map(field => (
+            <div className="field-block" key={field}>
+              <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
+              <input
+                className="compact-input"
+                type={field === 'price' || field === 'stock' ? 'number' : 'text'}
+                value={newEbook[field]}
+                onChange={(e) => handleNewChange(field, e.target.value)}
+              />
+            </div>
           ))}
+          <button className="btn btn-primary small-update-btn" onClick={handleInsert}>
+            Insert E-Book
+          </button>
         </div>
-        <button className="btn btn-secondary" onClick={() => navigate('/admin')}>
-          Back
-        </button>
       </div>
+
+      {/* Existing List */}
+      <div className="item-list">
+        {ebooks.map(ebook => (
+          <div className="list-item-box" key={ebook.id}>
+            <button
+              className="btn btn-primary compact-btn"
+              onClick={() => toggleExpand(ebook.id)}
+            >
+              {ebook.name}
+            </button>
+
+            {ebook.expanded && (
+              <div className="item-details">
+                <div className="field-block">
+                  <label>ID:</label>
+                  <span>{ebook.id}</span>
+                </div>
+                <div className="field-block">
+                  <label>Title:</label>
+                  <span>{ebook.name}</span>
+                </div>
+                <div className="field-block">
+                  <label>Price ($):</label>
+                  <input
+                    type="number"
+                    className="compact-input"
+                    value={ebook.price}
+                    onChange={e => handleChange(ebook.id, 'price', e.target.value)}
+                  />
+                </div>
+                <button
+                  className="btn btn-secondary small-update-btn"
+                  onClick={() => handleUpdate(ebook.id)}
+                >
+                  Update
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <button className="btn btn-secondary back-btn" onClick={() => navigate('/admin')}>
+        Back
+      </button>
+    </div>
   );
 }
 

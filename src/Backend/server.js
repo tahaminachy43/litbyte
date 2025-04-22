@@ -21,6 +21,8 @@ const GET_ROUTES = {
     '/admin/user/getAll':  { handler: admin.adminGetUsers, params: [] },
     '/student/profile':    { handler: store.fetchUser, params: ['email']},
     '/student/profile/getCourse': { handler: store.fetchCourse, params: ['ucid'] },
+    '/admin/order/getAll': { handler: admin.adminGetOrders, params: [] }
+
 };
 
 const POST_ROUTES = {
@@ -34,7 +36,8 @@ const POST_ROUTES = {
     '/admin/book/update':      admin.adminUpdateBook,
     '/admin/ebook/update':     admin.adminUpdateEbookPrice,
     '/student/profile/course': student.addCourse,
-    '/student/profile/deleteCourse': student.deleteCourse
+    '/student/profile/deleteCourse': student.deleteCourse,
+    '/admin/user/delete': admin.adminDeleteUser 
 };
 
 const db = mysql.createConnection({

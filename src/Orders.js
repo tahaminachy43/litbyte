@@ -1,30 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 
 function Orders() {
   const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
 
-  const [orders, setOrders] = useState([
-    { id: 1, number: "#1001", customer: "Jane Doe", total: "$45.00", expanded: false },
-    { id: 2, number: "#1002", customer: "John Smith", total: "$30.00", expanded: false },
-  ]);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await fetch('http://localhost:3000/admin/order/getAll');
+        if (!res.ok) throw new Error(`Error fetching orders: ${res.status}`);
+        const data = await res.json();
+
+        const withExpand = data.map(o => ({
+          ...o,
+          id: o.order_id || o.Order_ID,
+          expanded: false
+        }));
+        setOrders(withExpand);
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+      }
+    };
+    fetchOrders();
+  }, []);
 
   const toggleExpand = (id) => {
     setOrders(prev =>
       prev.map(o => o.id === id ? { ...o, expanded: !o.expanded } : o)
     );
-  };
-
-  const handleChange = (id, field, value) => {
-    setOrders(prev =>
-      prev.map(o => o.id === id ? { ...o, [field]: value } : o)
-    );
-  };
-
-  const handleUpdate = (id) => {
-    const order = orders.find(o => o.id === id);
-    console.log("Updated order:", order);
   };
 
   return (
@@ -34,20 +39,30 @@ function Orders() {
         {orders.map(order => (
           <div className="list-item-box" key={order.id}>
             <button className="btn btn-secondary compact-btn" onClick={() => toggleExpand(order.id)}>
-              {order.number}
+              Order #{order.id}
             </button>
             {order.expanded && (
               <div className="item-details">
-                <div><label>Order #:</label><br /><input className="compact-input" value={order.number} onChange={(e) => handleChange(order.id, 'number', e.target.value)} /></div>
-                <div><label>Customer:</label><br /><input className="compact-input" value={order.customer} onChange={(e) => handleChange(order.id, 'customer', e.target.value)} /></div>
-                <div><label>Total:</label><br /><input className="compact-input" value={order.total} onChange={(e) => handleChange(order.id, 'total', e.target.value)} /></div>
-                <button className="btn btn-secondary small-update-btn" onClick={() => handleUpdate(order.id)}>Update</button>
+                <div className="field-block">
+                  <label>Order ID:</label>
+                  <span>{order.id}</span>
+                </div>
+                <div className="field-block">
+                  <label>Customer:</label>
+                  <span>{order.customer || order.Customer || "Unknown"}</span>
+                </div>
+                <div className="field-block">
+                  <label>Total ($):</label>
+                  <span>{order.total_price || order.Total_Price || "0.00"}</span>
+                </div>
               </div>
             )}
           </div>
         ))}
       </div>
-      <button className="btn btn-secondary" onClick={() => navigate('/admin')}>Back</button>
+      <button className="btn btn-secondary back-btn" onClick={() => navigate('/admin')}>
+        Back
+      </button>
     </div>
   );
 }
