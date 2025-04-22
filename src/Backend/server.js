@@ -19,18 +19,22 @@ const GET_ROUTES = {
     '/admin/ebook/getAll': { handler: admin.adminGetEbook, params: [] },
     '/admin/ebook/get':    { handler: store.fetchEbook,   params: ['ebook_id'] },
     '/admin/user/getAll':  { handler: admin.adminGetUsers, params: [] },
+    '/student/profile':    { handler: store.fetchUser, params: ['email']},
+    '/student/profile/getCourse': { handler: store.fetchCourse, params: ['ucid'] },
 };
 
 const POST_ROUTES = {
     '/register':               student.studentSignup,
     '/login':                  student.studentLogin,
-    '/adminlogin':             admin.adminLogin,
+    '/admin/login':            admin.adminLogin,
     '/admin/book/insert':      admin.adminInsertBook,
     '/admin/ebook/insert':     admin.adminInsertEbook,
     '/admin/book/delete':      admin.adminDeleteBook,
     '/admin/ebook/delete':     admin.adminDeleteEbook,
     '/admin/book/update':      admin.adminUpdateBook,
-    '/admin/ebook/updatePrice':admin.adminUpdateEbookPrice,
+    '/admin/ebook/update':     admin.adminUpdateEbookPrice,
+    '/student/profile/course': student.addCourse,
+    '/student/profile/deleteCourse': student.deleteCourse
 };
 
 const db = mysql.createConnection({

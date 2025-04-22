@@ -14,7 +14,7 @@ export default function Login() {
     setMessage('');
 
     try {
-      const res = await fetch('http://localhost:3000/login', {
+      const res = await fetch('http://localhost:3000/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -26,7 +26,7 @@ export default function Login() {
       } else {
         setMessage(`Success: ${text}`);
         // On successful login, redirect
-        setTimeout(() => navigate('/dashboard'), 1500);
+        setTimeout(() => navigate('/admin'), 1500);
       }
     } catch (err) {
       setMessage('Network error');
