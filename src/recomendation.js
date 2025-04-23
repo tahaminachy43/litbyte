@@ -1,11 +1,12 @@
 // src/cart.js
 import React, { useState, useEffect } from 'react';
-import { FaTimes }           from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { FaTimes,  FaSearch, FaShoppingCart }           from 'react-icons/fa';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import './cart.css';
 
 export default function Cart() {
   const navigate   = useNavigate();
+  const location = useLocation();
   const [cartItems, setCartItems] = useState(() => {
     try { return JSON.parse(localStorage.getItem('cartItems')) || []; }
     catch { return []; }
@@ -50,7 +51,41 @@ export default function Cart() {
 
   return (
       <div className="cart-container">
-        {/* your navbar… */}
+        <nav className="navbar">
+        <div className="nav-left">
+          <div className="logo-container">
+            <h1 className="logo">LitByte</h1>
+          </div>
+        </div>
+        
+        <div className="nav-center">
+          <ul className="nav-links">
+            <li className={location.pathname === '/customer' ? 'active' : ''}>
+              <Link to="/customer">Home</Link>
+            </li>
+            <li className={location.pathname === '/recommendations' ? 'active' : ''}>
+              <Link to="/recommendations">Recommendations</Link>
+            </li>
+            <li className={location.pathname === '/courses' ? 'active' : ''}>
+              <Link to="/courses">Profile</Link>
+            </li>
+            <li className={location.pathname === '/cart' ? 'active' : ''}>
+              <Link to="/cart">Cart</Link>
+            </li>
+          </ul>
+        </div>
+        <div className="nav-right">
+          <div className="search-container">
+            <input type="text" placeholder="Search..." className="search-input" />
+            <button className="search-button">
+              <FaSearch className="search-icon" />
+            </button>
+          </div>
+          <button className="cart-button">
+            <FaShoppingCart className="cart-icon" />
+          </button>
+        </div>
+      </nav>
 
         <div className="cart-content">
           <h1>Your Shopping Cart</h1>
