@@ -1,86 +1,107 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaSearch, FaShoppingCart } from 'react-icons/fa';
 import { useLocation, Link } from 'react-router-dom';
 import './customer.css';
-import book1 from "./Assets/C1001.jpg";
-import book2 from "./Assets/Book 2.jpg";
-import book3 from "./Assets/Book 3.jpg";
-import book4 from "./Assets/Book 4.jpg";
-import book5 from "./Assets/Book 5.jpg";
 
-const recentBooks = [
-  { id: 1, title: 'PSALMS', author: 'Jacob Scott', cover: book1 },
-  { id: 2, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', cover: book2 },
-  { id: 3, title: 'To Kill a Mockingbird', author: 'Harper Lee', cover: book3 },
-  { id: 4, title: '1984', author: 'George Orwell', cover: book4 },
-  { id: 5, title: 'Pride and Prejudice', author: 'Jane Austen', cover: book5 },
-];
 
 function Home() {
   const location = useLocation();
+  const [books, setBooks] = useState([]);
+
+  // Fetch top 5 books on mount
+  useEffect(() => {
+    async function fetchTopBooks() {
+      try {
+        const res = await fetch('http://localhost:3000/student/top5Books');
+        if (!res.ok) throw new Error(`Error fetching books: ${res.status}`);
+        const data = await res.json();
+        setBooks(data);
+      } catch (err) {
+        console.error('Failed to fetch top books:', err);
+      }
+    }
+    fetchTopBooks();
+  }, []);
+
+  // Ensure exactly 5 slots
+  const slots = Array.from({ length: 5 });
 
   return (
-    <div className="home-container">
-
-      <nav className="navbar">
-        <div className="nav-left">
-          <div className="logo-container">
-            <h1 className="logo">LitByte</h1>
+      <div className="home-container">
+        <nav className="navbar">
+          <div className="nav-left">
+            <div className="logo-container">
+              <h1 className="logo">LitByte</h1>
+            </div>
           </div>
-        </div>
-        
-        <div className="nav-center">
-          <ul className="nav-links">
-            <li className={location.pathname === '/customer' ? 'active' : ''}>
-              <Link to="/customer">Home</Link>
-            </li>
-            <li className={location.pathname === '/recommendations' ? 'active' : ''}>
-              <Link to="/recommendations">Recommendations</Link>
-            </li>
-            <li className={location.pathname === '/courses' ? 'active' : ''}>
-              <Link to="/courses">Profile</Link>
-            </li>
-            <li className={location.pathname === '/cart' ? 'active' : ''}>
-              <Link to="/cart">Cart</Link>
-            </li>
-          </ul>
-        </div>
-        
-        <div className="nav-right">
-          <div className="search-container">
-            <input type="text" placeholder="Search..." className="search-input" />
-            <button className="search-button">
-              <FaSearch className="search-icon" />
+          <div className="nav-center">
+            <ul className="nav-links">
+              <li className={location.pathname === '/customer' ? 'active' : ''}>
+                <Link to="/customer">Home</Link>
+              </li>
+              <li className={location.pathname === '/recommendations' ? 'active' : ''}>
+                <Link to="/recommendations">Recommendations</Link>
+              </li>
+              <li className={location.pathname === '/courses' ? 'active' : ''}>
+                <Link to="/courses">Profile</Link>
+              </li>
+              <li className={location.pathname === '/cart' ? 'active' : ''}>
+                <Link to="/cart">Cart</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="nav-right">
+            <div className="search-container">
+              <input type="text" placeholder="Search..." className="search-input" />
+              <button className="search-button">
+                <FaSearch className="search-icon" />
+              </button>
+            </div>
+            <button className="cart-button">
+              <FaShoppingCart className="cart-icon" />
             </button>
           </div>
-          <button className="cart-button">
-            <FaShoppingCart className="cart-icon" />
-          </button>
-        </div>
-      </nav>
+        </nav>
 
-      <div className="main-content">
-        <div className="welcome-section">
-          <h2>Welcome to LitByte</h2>
-          <p>Here are some newly added books</p>
-          <p className="subtext">With us, you can shop online & help save time?</p>
-          {/* This should link to recomendation  */}
-          <Link to="/recommendations" className="explore-button">
-            Explore Books →
-          </Link>
-        </div>
-        
-        <div className="books-scrollable">
-          {recentBooks.map(book => (
-            <div key={book.id} className="book-card">
-              <img src={book.cover} alt={book.title} className="book-cover" />
-              <h3>{book.title}</h3>
-              <p>{book.author}</p>
-            </div>
-          ))}
+        <div className="main-content">
+          <div className="welcome-section">
+            <h2>Welcome to LitByte</h2>
+            <p>Here are some newly added books</p>
+            <p className="subtext">With us, you can shop online &amp; help save time?</p>
+            <Link to="/recommendations" className="explore-button" >
+              Explore Books
+
+            </Link>
+
+          </div>
+
+          <div className="books-scrollable">
+            {slots.map((_, idx) => {
+              const book = books[idx];
+              return (
+                  <div key={idx} className="book-card">
+                    {book ? (
+                        <>
+                          <img
+                              src={book.cover_image}
+                              alt={book.name || book.book_name}
+                              className="book-cover"
+                          />
+                          <h3>{book.name || book.book_name}</h3>
+                          <p>Author: {book.author}</p>
+                          <p>Price: ${book.price}</p>
+                          <p>Course: {book.course_id}</p>
+                          <p>ID: {book.book_id}</p>
+                        </>
+                    ) : (
+                        <div className="empty-slot" />
+                    )}
+                  </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
   );
 }
 

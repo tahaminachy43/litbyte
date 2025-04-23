@@ -1,4 +1,3 @@
-// server.js
 const http    = require('http');
 const mysql   = require('mysql2');
 const { URL } = require('url');
@@ -12,7 +11,6 @@ const CORS = {
     'Access-Control-Allow-Headers': 'Content-Type'
 };
 
-// Define all GET routes here, with optional `params` arrays
 const GET_ROUTES = {
     '/admin/book/getAll':  { handler: admin.adminGetBooks, params: [] },
     '/admin/book/get':     { handler: store.fetchBook,    params: ['book_id'] },
@@ -21,6 +19,9 @@ const GET_ROUTES = {
     '/admin/user/getAll':  { handler: admin.adminGetUsers, params: [] },
     '/student/profile':    { handler: store.fetchUser, params: ['email']},
     '/student/profile/getCourse': { handler: store.fetchCourse, params: ['ucid'] },
+    '/student/top5Books': {handler: store.fetchTopBooks, params: [] },
+    '/student/AllBooks': {handler: store.fetchAllBooks, params: [] },
+    '/student/rec/Books': {handler: store.fetchRecBooks, params: ['ucid'] }
 };
 
 const POST_ROUTES = {
@@ -34,7 +35,9 @@ const POST_ROUTES = {
     '/admin/book/update':      admin.adminUpdateBook,
     '/admin/ebook/update':     admin.adminUpdateEbookPrice,
     '/student/profile/course': student.addCourse,
-    '/student/profile/deleteCourse': student.deleteCourse
+    '/student/profile/deleteCourse': student.deleteCourse,
+    '/admin/user/delete':     admin.adminDeleteUser,
+    '/order/add':   store.addOrder
 };
 
 const db = mysql.createConnection({

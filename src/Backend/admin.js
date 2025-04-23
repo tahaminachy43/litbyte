@@ -1,6 +1,7 @@
 // admin.js
 // Functions for admin-related actions
 
+const result = require("mysql/lib/protocol/packets/OkPacket");
 const adminLogin = (db, data, res) => {
     const { email, password } = data;
     if (!email || !password) {
@@ -24,19 +25,19 @@ const adminLogin = (db, data, res) => {
 };
 
 const adminInsertBook = (db, data, res) => {
-    const { book_id, author, name, stock, price, genre, cover_page } = data;
+    const { book_id, author, name, stock, price, genre, course_id, cover_page } = data;
     if (!book_id || !author || !name || stock == null || price == null || !genre) {
         res.statusCode = 400;
         return res.end('Missing required fields');
     }
-    const sql = 'INSERT INTO Book (book_id, author, name, stock, price, genre, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [book_id, author, name, stock, price, genre, cover_page], (err, result) => {
+    const sql = 'INSERT INTO Book (book_id, author, name, stock, price, genre, course_id, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [book_id, author, name, stock, price, genre, course_id, cover_page], (err, result) => {
         if (err) {
             res.statusCode = 500;
             return res.end('Error inserting book');
         }
         res.statusCode = 201;
-        res.end('Book inserted successfully, ID: ' + result.insertId);
+        res.end('Book inserted successfully');
     });
 };
 
@@ -47,7 +48,7 @@ const adminInsertEbook = (db, data, res) => {
         return res.end('Missing required fields');
     }
     const sql =
-        'INSERT INTO Ebook (ebook_id, author, name, stock, price, genre, rental, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        'INSERT INTO Ebook (ebook_id, author, name, price, genre, rental, course_id, cover_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [ebook_id, author, name, stock, price, genre, rental, cover_page], (err, result) => {
         if (err) {
             res.statusCode = 500;
@@ -143,6 +144,8 @@ const adminUpdateEbookPrice = (db, data, res) => {
 // Add function to modify price
 
 
+
+
 const adminGetBooks = (db, res) => {
     const sql = 'SELECT book_id, name, stock, price FROM Book';
     db.query(sql, (err, results) => {
@@ -169,6 +172,24 @@ const adminGetEbook = (db, res) => {
     })
 };
 
+const adminDeleteUser = (db, data, res) => {
+    const { ucid } = data;
+    if (!ucid) {
+        res.statusCode = 400;
+        return res.end('Missing required fields');
+    }
+
+    const sql = 'DELETE FROM Student WHERE ucid = ?';
+    db.query(sql, [ucid], (err, result) => {
+        if (err) {
+            res.statusCode = 500;
+            return res.end('Error deleting user');
+        }
+        res.statusCode = 201;
+        res.end('User deleted successfully');
+    });
+};
+
 const adminGetUsers = (db, res) => {
     const sql = 'SELECT ucid, email, first_name, last_name FROM Student';
     db.query(sql, (err, results) => {
@@ -182,6 +203,14 @@ const adminGetUsers = (db, res) => {
     })
 }
 
+const adminGetOrders = (db, res) => {
+    const sql = 'SELECT order_id, '
+}
+
+const adminGetRental = (db, res) => {
+
+}
+
 module.exports = {
     adminLogin,
     adminInsertBook,
@@ -192,5 +221,7 @@ module.exports = {
     adminUpdateEbookPrice,
     adminGetBooks,
     adminGetEbook,
-    adminGetUsers
+    adminGetUsers,
+    adminGetOrders,
+    adminDeleteUser
 };
