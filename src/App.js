@@ -35,7 +35,7 @@ function HomeWithNavbar() {
         <div className="content-container">
           <div className="content-text">
             <h2>Welcome to LitByte</h2>
-            <p>Your personalized learning companion</p>
+            <p>Your personalized online bookstore for learning and for fun!</p>
           </div>
           
           <div className="content-image">

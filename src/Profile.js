@@ -18,7 +18,7 @@ export default function Profile() {
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState({ cardNumber: '', expiry: '', cvv: '' });
 
-  // Load user profile on mount and fetch courses by UCID
+
   useEffect(() => {
     const email = localStorage.getItem('email');
     if (!email) {
