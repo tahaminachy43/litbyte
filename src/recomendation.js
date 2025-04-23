@@ -32,7 +32,7 @@ function Recommendations() {
 
   return (
     <div className="recommendations-container">
-      {/* Navigation Bar */}
+
       <nav className="navbar">
         <div className="nav-left">
           <div className="logo-container">
