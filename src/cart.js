@@ -103,12 +103,7 @@ export default function Cart() {
             </ul>
           </div>
           <div className="nav-right">
-            <div className="search-container">
-              <input type="text" placeholder="Search..." className="search-input" />
-              <button className="search-button">
-                <FaSearch className="search-icon" />
-              </button>
-            </div>
+            
             <button className="cart-button">
               <FaShoppingCart className="cart-icon" />
               {cartItems.length > 0 && (
