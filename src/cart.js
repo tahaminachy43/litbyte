@@ -1,14 +1,14 @@
 // src/cart.js
 import React, { useState, useEffect } from 'react';
-import { FaTimes }                from 'react-icons/fa';
-import { Link, useNavigate }      from 'react-router-dom';
+import { FaTimes }           from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import './cart.css';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = 'http://localhost:3001';  // Match your backend host/port
 
 export default function Cart() {
   const navigate   = useNavigate();
-  const [cartItems, setCartItems] = useState(() => {
+  const [cartItems, setCartItems]      = useState(() => {
     try { return JSON.parse(localStorage.getItem('cartItems')) || []; }
     catch { return []; }
   });
@@ -29,10 +29,9 @@ export default function Cart() {
     );
   };
 
-  // Safely parse price (might be a string)
-  const asNumber = p => (typeof p === 'string' ? parseFloat(p) || 0 : p);
+  const asNumber = p =>
+      typeof p === 'string' ? parseFloat(p) || 0 : p;
 
-  // Compute totals
   const subtotal = cartItems.reduce(
       (sum, i) => sum + asNumber(i.price) * i.quantity,
       0
@@ -40,42 +39,33 @@ export default function Cart() {
   const tax   = subtotal * 0.1;
   const total = subtotal + tax;
 
-  // --- NEW: “Proceed to Checkout” handler ---
-  const handleCheckout = async () => {
+  // “Proceed to Checkout” handler
+  const handleCheckout = async event => {
+    event.preventDefault();
+
     if (cartItems.length === 0) {
       alert('Your cart is empty');
       return;
     }
     setIsCheckingOut(true);
 
-    // 1) Build payload
-    const ucid       = localStorage.getItem('ucid') || '';
-    const order_date = new Date().toISOString();
-    const payload    = {
-      ucid,
-      total_price: total.toFixed(2),
-      order_date
-    };
+    // Backend expects { order_id, total_price }
+    const order_id    = localStorage.getItem('ucid') || '';
+    const total_price = total.toFixed(2);
 
     try {
-      // 2) Send to your backend route
       const res = await fetch(`${API_BASE}/order/add`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
+        body:    JSON.stringify({ order_id, total_price }),
       });
 
-      // 3) If backend responds with non-2xx, grab its HTML/text
       if (!res.ok) {
         const errText = await res.text().catch(() => res.statusText);
         throw new Error(errText);
       }
 
-      // 4) Read the success message (you return plain text)
-      const msg = await res.text();
-      console.log('Server says:', msg);
-
-      // 5) Clear cart + redirect
+      // on success, clear cart and maybe show confirmation
       setCartItems([]);
       localStorage.removeItem('cartItems');
       navigate('/order-confirmation');
@@ -85,7 +75,6 @@ export default function Cart() {
       setIsCheckingOut(false);
     }
   };
-  // --- end handleCheckout ---
 
   return (
       <div className="cart-container">
@@ -149,6 +138,7 @@ export default function Cart() {
                     <span>Total</span><span>${total.toFixed(2)}</span>
                   </div>
                   <button
+                      type="button"
                       className="checkout-button"
                       onClick={handleCheckout}
                       disabled={isCheckingOut}

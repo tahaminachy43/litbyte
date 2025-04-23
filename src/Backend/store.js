@@ -188,13 +188,9 @@ const fetchRecBooks = (db, ucid, res) => {
 };
 
 const addOrder = (db, data, res) => {
-    const { ucid, total_price, order_date } = data;
-    if (!ucid || !total_price || !order_date) {
-        res.statusCode = 400;
-        return res.end('Missing required fields');
-    }
-    const sql = 'INSERT INTO orders (ucid, total_price, order_date) VALUES (?, ?, ?)';
-    db.query(sql, [ucid, total_price, order_date], (err, result) => {
+    const { order_id, total_price } = data;
+    const sql = 'INSERT INTO orders (order_id, total_price) VALUES (?, ?)';
+    db.query(sql, [order_id, total_price], (err, result) => {
         if (err) {
             res.statusCode = 500;
             return res.end('Error inserting order');

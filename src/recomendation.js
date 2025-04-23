@@ -1,173 +1,126 @@
-// recomendation.js
+// src/cart.js
 import React, { useState, useEffect } from 'react';
-import { FaSearch, FaShoppingCart } from 'react-icons/fa';
-import { useLocation, Link } from 'react-router-dom';
-import './recomendation.css';
+import { FaTimes }           from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import './cart.css';
 
-const Recommendations = () => {
-  const location = useLocation();
-  const [recommendedBooks, setRecommendedBooks] = useState([]);
-  const [allBooks, setAllBooks] = useState([]);
-  const [cartCount, setCartCount] = useState(() => {
-    try {
-      const existingCart = JSON.parse(localStorage.getItem('cartItems')) || [];
-      return existingCart.reduce((sum, item) => sum + item.quantity, 0);
-    } catch {
-      return 0;
-    }
+export default function Cart() {
+  const navigate   = useNavigate();
+  const [cartItems, setCartItems] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('cartItems')) || []; }
+    catch { return []; }
   });
 
-  // Add book to cart, update badge count, persist to localStorage
-  const handleAddToCart = (book) => {
-    try {
-      const existingCart = JSON.parse(localStorage.getItem('cartItems')) || [];
-      const idx = existingCart.findIndex(i => i.id === book.book_id);
+  // keep localStorage in sync
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
 
-      // Convert incoming price (string) to a number
-      const priceNum = Number(book.price) || 0;
+  const removeFromCart = id =>
+      setCartItems(items => items.filter(i => i.id !== id));
 
-      if (idx > -1) {
-        existingCart[idx].quantity += 1;
-      } else {
-        existingCart.push({
-          id:       book.book_id,
-          title:    book.name,
-          price:    priceNum,
-          quantity: 1,
-          cover:    book.cover_image,
-          author:   book.author,
-        });
-      }
-
-      localStorage.setItem('cartItems', JSON.stringify(existingCart));
-      setCartCount(existingCart.reduce((sum, item) => sum + item.quantity, 0));
-    } catch (err) {
-      console.error('Error adding to cart:', err);
-    }
+  const updateQuantity = (id, qty) => {
+    if (qty < 1) return;
+    setCartItems(items =>
+        items.map(i => (i.id === id ? { ...i, quantity: qty } : i))
+    );
   };
 
-  useEffect(() => {
-    const ucid = localStorage.getItem('ucid');
-    if (!ucid) return;
+  const asNumber = p =>
+      typeof p === 'string' ? parseFloat(p) || 0 : p;
 
-    const fetchRecommended = async () => {
-      try {
-        const res = await fetch(`http://localhost:3000/student/rec/Books?ucid=${ucid}`);
-        if (!res.ok) throw new Error(`Recommendations error: ${res.status}`);
-        setRecommendedBooks(await res.json());
-      } catch (err) {
-        console.error('Failed to fetch recommended books:', err);
-      }
-    };
+  const subtotal = cartItems.reduce(
+      (sum, i) => sum + asNumber(i.price) * i.quantity,
+      0
+  );
+  const tax   = subtotal * 0.1;
+  const total = subtotal + tax;
 
-    const fetchAll = async () => {
-      try {
-        const res = await fetch('http://localhost:3000/student/AllBooks');
-        if (!res.ok) throw new Error(`All books error: ${res.status}`);
-        setAllBooks(await res.json());
-      } catch (err) {
-        console.error('Failed to fetch all books:', err);
-      }
-    };
-
-    fetchRecommended();
-    fetchAll();
-  }, []);
+  // Simplified checkout: show confirmation and redirect
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      alert('Your cart is empty');
+      return;
+    }
+    alert('Order complete');
+    setCartItems([]);
+    localStorage.removeItem('cartItems');
+    navigate('/recommendations');
+  };
 
   return (
-      <div className="recommendations-container">
-        {/* Navigation Bar */}
-        <nav className="navbar">
-          <div className="nav-left">
-            <h1 className="logo">LitByte</h1>
-          </div>
-          <div className="nav-center">
-            <ul className="nav-links">
-              <li className={location.pathname === '/customer' ? 'active' : ''}>
-                <Link to="/customer">Home</Link>
-              </li>
-              <li className={location.pathname === '/recommendations' ? 'active' : ''}>
-                <Link to="/recommendations">Recommendations</Link>
-              </li>
-              <li className={location.pathname === '/courses' ? 'active' : ''}>
-                <Link to="/courses">Profile</Link>
-              </li>
-              <li className={location.pathname === '/cart' ? 'active' : ''}>
-                <Link to="/cart">Cart</Link>
-              </li>
-            </ul>
-          </div>
-          <div className="nav-right">
-            <div className="search-container">
-              <input type="text" placeholder="Search..." className="search-input" />
-              <button className="search-button">
-                <FaSearch className="search-icon" />
-              </button>
-            </div>
-            <Link to="/cart" className="cart-button">
-              <FaShoppingCart className="cart-icon" />
-              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-            </Link>
-          </div>
-        </nav>
+      <div className="cart-container">
+        {/* your navbar… */}
 
-        {/* Recommended Books */}
-        <div className="recommendations-header">
-          <h1>Recommended Books For You</h1>
-          <p className="subtitle">Based on your courses</p>
-        </div>
-        <div className="full-width-scroll-container">
-          <div className="books-scrollable">
-            {recommendedBooks.length > 0 ? (
-                recommendedBooks.map(book => (
-                    <div key={book.book_id} className="book-card">
-                      <img src={book.cover_image} alt={book.name} className="book-cover" />
-                      <h3>{book.name}</h3>
-                      <p className="author">Author: {book.author}</p>
-                      <p>Price: ${Number(book.price).toFixed(2)}</p>
-                      <button
-                          className="add-to-cart-btn"
-                          onClick={() => handleAddToCart(book)}
-                      >
-                        Add to Cart
-                      </button>
-                    </div>
-                ))
-            ) : (
-                <p className="no-data">No recommendations available</p>
-            )}
-          </div>
-        </div>
+        <div className="cart-content">
+          <h1>Your Shopping Cart</h1>
 
-        {/* All Books Section */}
-        <div className="all-books-section">
-          <div className="section-header">
-            <h2>All Available Books</h2>
-            <p className="subtitle">Browse our complete collection</p>
-          </div>
-          <div className="books-grid">
-            {allBooks.length > 0 ? (
-                allBooks.map(book => (
-                    <div key={book.book_id} className="book-card">
-                      <img src={book.cover_image} alt={book.name} className="book-cover" />
-                      <h3>{book.name}</h3>
-                      <p className="author">Author: {book.author}</p>
-                      <p>Price: ${Number(book.price).toFixed(2)}</p>
-                      <button
-                          className="add-to-cart-btn"
-                          onClick={() => handleAddToCart(book)}
-                      >
-                        Add to Cart
-                      </button>
-                    </div>
-                ))
-            ) : (
-                <p className="no-data">No books available</p>
-            )}
-          </div>
+          {cartItems.length === 0 ? (
+              <div className="empty-cart">
+                <p>Your cart is empty</p>
+                <Link to="/recommendations">Continue Shopping</Link>
+              </div>
+          ) : (
+              <div className="cart-grid">
+                <div className="cart-items">
+                  {cartItems.map(item => {
+                    const price = asNumber(item.price);
+                    return (
+                        <div key={item.id} className="cart-item">
+                          {item.cover && (
+                              <img
+                                  src={item.cover}
+                                  alt={item.title}
+                                  className="cart-item-image"
+                              />
+                          )}
+                          <div className="cart-item-details">
+                            <h3>{item.title}</h3>
+                            <p className="price">${price.toFixed(2)}</p>
+                            <div className="quantity-control">
+                              <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                                −
+                              </button>
+                              <span>{item.quantity}</span>
+                              <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                                +
+                              </button>
+                            </div>
+                          </div>
+                          <div className="item-total">
+                            ${(price * item.quantity).toFixed(2)}
+                          </div>
+                          <button className="remove-item" onClick={() => removeFromCart(item.id)}>
+                            <FaTimes />
+                          </button>
+                        </div>
+                    );
+                  })}
+                </div>
+
+                <div className="checkout-summary">
+                  <h3>Order Summary</h3>
+                  <div className="summary-row">
+                    <span>Subtotal</span><span>${subtotal.toFixed(2)}</span>
+                  </div>
+                  <div className="summary-row">
+                    <span>Tax (10%)</span><span>${tax.toFixed(2)}</span>
+                  </div>
+                  <div className="summary-row total">
+                    <span>Total</span><span>${total.toFixed(2)}</span>
+                  </div>
+                  <button
+                      type="button"
+                      className="checkout-button"
+                      onClick={handleCheckout}
+                  >
+                    Proceed to Checkout
+                  </button>
+                  <Link to="/recommendations">Continue Shopping</Link>
+                </div>
+              </div>
+          )}
         </div>
       </div>
   );
-};
-
-export default Recommendations;
+}
