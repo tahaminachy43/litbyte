@@ -30,6 +30,8 @@ export default function Profile() {
         const res = await fetch(`http://localhost:3000/student/profile?email=${email}`);
         if (!res.ok) throw new Error(`Status ${res.status}`);
         const data = await res.json();
+        localStorage.setItem('ucid', data.ucid);
+
         setUser(data);
 
         const coursesRes = await fetch(

@@ -88,4 +88,121 @@ const fetchCourse = (db, ucid, res) => {
     });
 };
 
-module.exports = {fetchBook, fetchEbook, fetchUser, fetchCourse};
+
+const fetchTopBooks = (db, res) => {
+    const sql = `
+        SELECT
+            book_id,
+            name,
+            author,
+            price,
+            course_id,
+            cover_image
+        FROM Book
+        ORDER BY book_id DESC
+        LIMIT 5
+    `;
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching top books:', err);
+            return res.status(500).send('Error fetching top books');
+        }
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(results));
+
+    });
+};
+
+const fetchAllBooks = (db, res) => {
+    const sql = `
+        SELECT
+            book_id,
+            name,
+            author,
+            price,
+            course_id,
+            cover_image
+        FROM Book
+    `;
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching books:', err);
+            return res.status(500).send('Error fetching books');
+        }
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(results));
+
+    });
+};
+
+const fetchRecBooks = (db, ucid, res) => {
+    if (!ucid) {
+        res.statusCode = 400;
+        return res.end('Missing required query parameter: ucid');
+    }
+
+    // 1) Get all course_ids for this student
+    const sqlCourses = `SELECT course_id FROM Student_Course WHERE ucid = ?`;
+    db.query(sqlCourses, [ucid], (err, courseRows) => {
+        if (err) {
+            res.statusCode = 500;
+            return res.end('Error retrieving courses');
+        }
+
+        const courseIds = courseRows.map(r => r.course_id);
+        // If student has no courses, return empty list of books
+        if (courseIds.length === 0) {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            return res.end(JSON.stringify([]));
+        }
+
+        // 2) Fetch all books matching those course_ids
+        // Build a placeholder string like "?, ?, ?"
+        const placeholders = courseIds.map(_ => '?').join(', ');
+        const sqlBooks = `
+      SELECT
+        book_id,
+        name,
+        author,
+        price,
+        course_id,
+        cover_image
+      FROM Book
+     WHERE course_id IN (${placeholders})
+    `;
+        db.query(sqlBooks, courseIds, (err2, bookRows) => {
+            if (err2) {
+                res.statusCode = 500;
+                return res.end('Error retrieving books');
+            }
+
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(bookRows));
+        });
+    });
+};
+
+const addOrder = (db, data, res) => {
+    const { ucid, total_price, order_date } = data;
+    if (!ucid || !total_price || !order_date) {
+        res.statusCode = 400;
+        return res.end('Missing required fields');
+    }
+    const sql = 'INSERT INTO orders (ucid, total_price, order_date) VALUES (?, ?, ?)';
+    db.query(sql, [ucid, total_price, order_date], (err, result) => {
+        if (err) {
+            res.statusCode = 500;
+            return res.end('Error inserting order');
+        }
+        res.statusCode = 201;
+        res.end('Order inserted successfully');
+    });
+};
+
+
+module.exports = { fetchBook, fetchEbook, fetchUser, fetchCourse, fetchTopBooks, fetchAllBooks, fetchRecBooks, addOrder };

@@ -75,11 +75,12 @@ const deleteCourse = (db, data, res) => {
     });
 };
 
+
 // Add course ID entity for books Ebooks and student
 // Add modify course ID for student
 module.exports = {
     studentSignup,
     studentLogin,
     addCourse,
-    deleteCourse
+    deleteCourse,
 };
