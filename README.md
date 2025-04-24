@@ -1,21 +1,24 @@
-HOW TO RUN THE DATABASE
+**HOW TO RUN THE DATABASE**
 To run the database, download and install MySQL Community Server from the official MySQL website (https://dev.mysql.com/downloads/). Once installed, ensure that the MySQL server is running and configured with the appropriate credentials used in the project. 
 Run the following command: mysql -u root -p 
-Username: root
-Password: wuhanyu89
+**Username: root
+Password: wuhanyu89**
 Additionally, have Node.js installed on your system. Check if Node is installed by running node -v in your terminal. If Node is not installed, download it from the official website (https://nodejs.org/en/download).
 Once MySQL and Node.js are set up, navigate to the root directory of the backend code and run the following command to start the server:
-node server.js
-HOW TO RUN THE WEB APPLICATION
+**node server.js**
+
+**HOW TO RUN THE WEB APPLICATION**
 Open a terminal and navigate to the directory containing the frontend React application.
 
 
 Run the following command to install all required dependencies:
-npm install
+**npm install**
 Once installation is complete, start the application with:
-npm start
+**npm start**
 After starting, the web application will be available at: http://localhost:3000
-FUNCTIONALITIES OF THE WEB INTERFACE
+
+**FUNCTIONALITIES OF THE WEB INTERFACE**
+
 Customer Features: http://localhost:3000/customer
 Register: New users can create an account by submitting a registration form. http://localhost:3000/register
 
