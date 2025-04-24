@@ -1,4 +1,64 @@
-# Getting Started with Create React App
+HOW TO RUN THE DATABASE
+To run the database, download and install MySQL Community Server from the official MySQL website (https://dev.mysql.com/downloads/). Once installed, ensure that the MySQL server is running and configured with the appropriate credentials used in the project. 
+Run the following command: mysql -u root -p 
+Username: root
+Password: wuhanyu89
+Additionally, have Node.js installed on your system. Check if Node is installed by running node -v in your terminal. If Node is not installed, download it from the official website (https://nodejs.org/en/download).
+Once MySQL and Node.js are set up, navigate to the root directory of the backend code and run the following command to start the server:
+node server.js
+HOW TO RUN THE WEB APPLICATION
+Open a terminal and navigate to the directory containing the frontend React application.
+
+
+Run the following command to install all required dependencies:
+npm install
+Once installation is complete, start the application with:
+npm start
+After starting, the web application will be available at: http://localhost:3000
+FUNCTIONALITIES OF THE WEB INTERFACE
+Customer Features: http://localhost:3000/customer
+Register: New users can create an account by submitting a registration form. http://localhost:3000/register
+
+
+Login: Existing users can log into the system using their email and password. http://localhost:3000/login
+
+
+Suggested Books: A personalized list of recommended books is shown.
+
+
+Course-Specific Books: Displays books associated with a specific course.
+
+
+Add to Cart: Users can add books to their shopping cart.
+
+
+Complete Purchase: Users can complete their book purchase by checking out.
+
+
+Admin Features: http://localhost:3000/admin
+Login: Admins can log into the admin panel. http://localhost:3000/adminLogin
+
+
+Add eBook: Admins can create new eBook listings.
+
+
+Add Book: Admins can add new physical book listings.
+
+
+Manage eBook Price: Admins can update the price of an eBook.
+
+
+Manage Book Stock and Price: Admins can update the available stock and price of physical books.
+
+
+Delete a Customer: Admins can permanently delete a customer's account.
+
+
+View Orders: Admins can view a list of all customer orders.
+
+
+
+--------------# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
